@@ -27,7 +27,7 @@ def compute_and_plot_gaussian_process():
 
     titles = ["Isotropic RBF", "Anisotropic RBF"]
     plt.figure(figsize=(10, 5))
-    for i, clf in enumerate((gpc_rbf_isotropic)):
+    for i, clf in enumerate((gpc_rbf_isotropic, gpc_rbf_anisotropic)):
         # Plot the predicted probabilities. For that, we will assign a color to
         # each point in the mesh [x_min, m_max]x[y_min, y_max].
         plt.subplot(1, 2, i + 1)
