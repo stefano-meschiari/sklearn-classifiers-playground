@@ -40,8 +40,8 @@ def compute_and_plot_gaussian_process():
 
         # Plot also the training points
         plt.scatter(X[:, 0], X[:, 1], c=np.array(["r", "g", "b"])[y], edgecolors=(0, 0, 0))
-        plt.xlabel("Sepal length")
-        plt.ylabel("Sepal width")
+        plt.xlabel("Feature 1")
+        plt.ylabel("Feature 2")
         plt.xlim(xx.min(), xx.max())
         plt.ylim(yy.min(), yy.max())
         #plt.xticks(())
