@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
+from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-
+from sklearn.ensemble import RandomForestClassifier
 import io, base64
 import random
 import functools
@@ -27,9 +28,11 @@ def front_matter():
                 "type": "list",
                 "values": [
                     "Logistic Regression",
-                    "Gaussian Process Classifier",
-                    "Decision Tree Classifier",
-                    "K-nearest Neighbors"
+                    "Decision Tree",
+                    "Random Forest",
+                    "Support Vector Machine (RBF)",
+                    "K-nearest Neighbors",
+                    "Gaussian Process Classifier"
                 ],
                 "value": "Logistic Regression"
             },
@@ -60,14 +63,19 @@ def compute(input):
 
     if classifier == "Gaussian Process Classifier":
         kernel = 1.0 * RBF([1.0])
-        classifier = GaussianProcessClassifier(kernel=kernel).fit(X, y)
+        classifier = GaussianProcessClassifier(kernel=kernel)
     elif classifier == "Logistic Regression":
-        classifier = LogisticRegression().fit(X, y)
-    elif classifier == "Decision Tree Classifier":
-        classifier = DecisionTreeClassifier(max_depth=5).fit(X, y)
+        classifier = LogisticRegression()
+    elif classifier == "Decision Tree":
+        classifier = DecisionTreeClassifier(max_depth=5)
+    elif classifier == "Support Vector Machine (RBF)":
+        classifier = SVC(gamma=2, C=1, probability=True)
     elif classifier == "K-nearest Neighbors":
-        classifier = KNeighborsClassifier(n_neighbors=5).fit(X, y)
+        classifier = KNeighborsClassifier(n_neighbors=5)
+    elif classifier == "Random Forest":
+        classifier = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1)
 
+    classifier.fit(X, y)
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
     plt.figure(figsize=(10, 8))
