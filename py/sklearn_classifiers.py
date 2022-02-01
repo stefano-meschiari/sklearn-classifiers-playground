@@ -18,7 +18,7 @@ def front_matter():
     return {
         "name": "Scikit-learn Classifiers demo",
         "description": """
-        This applet trains a classifier based on random data with two features. The training data contains 3
+        This applet trains a classifier based on random data with two features. The training data contains 2 or 3
         classes.
         """,
         "inputs": [
@@ -37,10 +37,21 @@ def front_matter():
                 "value": "Logistic Regression"
             },
             {
+                "name": "dataset_type",
+                "description": "Input dataset",
+                "type": "list",
+                "values": [
+                    "Random (3 classes)",
+                    "Concentric circles",
+                    "Moons"
+                ],
+                "value": "Random (3 classes)"
+            },
+            {
                 "name": "seed",
-                "description": "Random seed (generates training data)",
+                "description": "Random seed",
                 "type": "numeric",
-                "value": 0
+                "value": 42
             }
         ],
         "returns": "base-64-image"
@@ -48,13 +59,21 @@ def front_matter():
 
 @functools.cache
 def compute(input):
+    # hack only used for memoization; not necessary in general for python <-> javascript
+    # communication
     input = json.loads(input)
-    random_state = int(input["seed"])
     classifier = input["classifier"]
+    dataset_type = input["dataset_type"]
+    random_state = int(input["seed"])
 
-    # import some data to play with
-    (X, y) = datasets.make_classification(n_features=2, n_redundant=0, n_classes=3, n_clusters_per_class=1,
-        random_state=random_state)
+    if dataset_type == "Random (3 classes)":
+        (X, y) = datasets.make_classification(n_samples=200, n_features=2, n_redundant=0, n_classes=3, n_clusters_per_class=1,
+            random_state=random_state)
+    elif dataset_type == "Concentric circles":
+        (X, y) = datasets.make_circles(n_samples=200, noise=0.2, factor=0.5, random_state=random_state)
+    elif dataset_type == "Moons":
+        (X, y) = datasets.make_moons(n_samples=200, noise=0.2, random_state=random_state)
+    n_classes = len(np.unique(y))
 
     h = 0.02  # step size in the mesh
     # create a mesh to plot in
@@ -63,24 +82,28 @@ def compute(input):
 
     if classifier == "Gaussian Process Classifier":
         kernel = 1.0 * RBF([1.0])
-        classifier = GaussianProcessClassifier(kernel=kernel)
+        clf = GaussianProcessClassifier(kernel=kernel, max_iter_predict=50)
     elif classifier == "Logistic Regression":
-        classifier = LogisticRegression()
+        clf = LogisticRegression()
     elif classifier == "Decision Tree":
-        classifier = DecisionTreeClassifier(max_depth=5)
+        clf = DecisionTreeClassifier(max_depth=5)
     elif classifier == "Support Vector Machine (RBF)":
-        classifier = SVC(gamma=2, C=1, probability=True)
+        clf = SVC(gamma=2, C=1, probability=True)
     elif classifier == "K-nearest Neighbors":
-        classifier = KNeighborsClassifier(n_neighbors=5)
+        clf = KNeighborsClassifier(n_neighbors=5)
     elif classifier == "Random Forest":
-        classifier = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1)
+        clf = RandomForestClassifier(max_depth=5, n_estimators=20, max_features=1)
 
-    classifier.fit(X, y)
+    clf.fit(X, y)
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
     plt.figure(figsize=(10, 8))
 
-    Z = classifier.predict_proba(np.c_[xx.ravel(), yy.ravel()])
+    Z = clf.predict_proba(np.c_[xx.ravel(), yy.ravel()])
+    # if there are fewer than 3 classes, pad with 0s
+    if n_classes < 3:
+        Z = np.pad(Z, [(0, 0), (0, 3-n_classes)])
+        print(Z.shape)
 
     # Put the result into a color plot
     Z = Z.reshape((xx.shape[0], xx.shape[1], 3))
