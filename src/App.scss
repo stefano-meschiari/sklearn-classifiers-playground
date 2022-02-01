@@ -1,0 +1,9 @@
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+.img-container {
+    img {
+        max-width:100%;
+    }
+}

@@ -1,7 +1,7 @@
-import './App.css';
+import './App.scss';
 import { Container, Row } from 'react-bootstrap'
 import { PyodideLoader } from './PyodideLoader';
-import GaussianProcess from './GaussianProcess';
+import PyodideApplet from './PyodideApplet';
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Container fluid>
         <Row>
           <PyodideLoader>
-            <GaussianProcess />
+            <PyodideApplet src="/pyodide-sandbox/py/sklearn_classifiers.py" title="Scikit-learn Classifiers demo" />
           </PyodideLoader>
         </Row>
       </Container>
