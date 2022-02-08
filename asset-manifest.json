@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/pyodide-sandbox/static/css/main.2679ff41.css",
-    "main.js": "/pyodide-sandbox/static/js/main.0d9c69c7.js",
+    "main.css": "/pyodide-sandbox/static/css/main.523e223f.css",
+    "main.js": "/pyodide-sandbox/static/js/main.34490267.js",
     "static/js/166.8bc9c4f5.chunk.js": "/pyodide-sandbox/static/js/166.8bc9c4f5.chunk.js",
     "static/js/787.855a62e6.chunk.js": "/pyodide-sandbox/static/js/787.855a62e6.chunk.js",
     "static/js/359.05e1d120.chunk.js": "/pyodide-sandbox/static/js/359.05e1d120.chunk.js",
     "static/js/983.85f7c3d4.chunk.js": "/pyodide-sandbox/static/js/983.85f7c3d4.chunk.js",
     "index.html": "/pyodide-sandbox/index.html",
-    "main.2679ff41.css.map": "/pyodide-sandbox/static/css/main.2679ff41.css.map",
-    "main.0d9c69c7.js.map": "/pyodide-sandbox/static/js/main.0d9c69c7.js.map",
+    "main.523e223f.css.map": "/pyodide-sandbox/static/css/main.523e223f.css.map",
+    "main.34490267.js.map": "/pyodide-sandbox/static/js/main.34490267.js.map",
     "166.8bc9c4f5.chunk.js.map": "/pyodide-sandbox/static/js/166.8bc9c4f5.chunk.js.map",
     "787.855a62e6.chunk.js.map": "/pyodide-sandbox/static/js/787.855a62e6.chunk.js.map",
     "359.05e1d120.chunk.js.map": "/pyodide-sandbox/static/js/359.05e1d120.chunk.js.map",
     "983.85f7c3d4.chunk.js.map": "/pyodide-sandbox/static/js/983.85f7c3d4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2679ff41.css",
-    "static/js/main.0d9c69c7.js"
+    "static/css/main.523e223f.css",
+    "static/js/main.34490267.js"
   ]
 }
