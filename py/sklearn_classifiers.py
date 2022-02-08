@@ -175,7 +175,6 @@ class SklearnClassifiers:
             plt.imshow(Z,
                 extent=(x_min, x_max, y_min, y_max),
                 origin="lower",
-                interpolation="bilinear",
                 alpha=0.8)
         else:
             plt.text(0, 0,
