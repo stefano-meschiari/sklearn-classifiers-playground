@@ -1,4 +1,4 @@
-
+# TODO: refactor and comment the entire script
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -10,7 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import minmax_scale
-import io, base64
+import io, base64, math
 import random
 import functools
 import json
@@ -51,7 +51,8 @@ class SklearnClassifiers:
                         "Random (3 classes)",
                         "Empty (add your own observations)",
                         "Concentric circles",
-                        "Moons"
+                        "Moons",
+                        "Quadrants"
                     ],
                     "value": "Random (3 classes)"
                 },
@@ -82,7 +83,7 @@ class SklearnClassifiers:
             "returns": "base-64-image"
         }
 
-    @functools.cache
+    @functools.lru_cache(maxsize=5)
     def compute(self, input):
         # hack only used for memoization; not necessary in general for python <-> javascript
         # communication
@@ -94,9 +95,10 @@ class SklearnClassifiers:
         random_state = int(input["seed"])
         user_data = input["user_data"]
 
+        plt.style.use("seaborn-white")
 
         if dataset_type == "Random (3 classes)":
-            (X, y) = datasets.make_classification(n_samples=100, n_features=2, n_redundant=0, n_classes=3, n_clusters_per_class=1,
+            (X, y) = datasets.make_classification(n_samples=200, n_features=2, n_redundant=0, n_classes=3, n_clusters_per_class=1,
                 random_state=random_state)
         elif dataset_type == "Concentric circles":
             (X, y) = datasets.make_circles(n_samples=400, noise=0.2, factor=0.5, random_state=random_state)
@@ -104,6 +106,23 @@ class SklearnClassifiers:
             (X, y) = datasets.make_moons(n_samples=200, noise=0.2, random_state=random_state)
         elif dataset_type == "Empty (add your own observations)":
             (X, y) = ((np.ndarray(shape=(0, 2)), np.array([], dtype="int")))
+        elif dataset_type == "Quadrants":
+            n_samples = 400
+            np.random.seed(random_state)
+            X = np.column_stack((np.random.uniform(-1, 1, n_samples),
+                                 np.random.uniform(-1, 1, n_samples)))
+            y = np.zeros(n_samples, dtype="int")
+            y[(X[:, 0] < 0) & (X[:, 1] > 0)] = 1
+            y[(X[:, 0] > 0) & (X[:, 1] < 0)] = 1
+
+            if random_state != 0:
+                theta = np.random.uniform(0, 2*math.pi)
+                rot = np.array((
+                    (math.cos(theta), math.sin(theta)),
+                    (-math.sin(theta), math.cos(theta))
+                ))
+                X = X @ rot
+
         if X.shape[0] > 0:
             X = minmax_scale(X, feature_range=(-1, 1))
 
@@ -128,11 +147,13 @@ class SklearnClassifiers:
             width, height = self.figure.canvas.get_width_height()
             for datum in user_data:
                 coord = inv.transform((datum['x'], height-datum['y']))
+                print(datum['x'], ", ", datum['y'], " => ",
+                      coord[0], ", ", coord[1])
                 X = np.vstack((X, coord))
                 y = np.append(y, datum['class'])
 
         plt.close(self.figure)
-        self.figure, self.axes = plt.subplots(figsize=(10, 8))
+        self.figure, self.axes = plt.subplots(figsize=(10, 8), dpi=200)
         n_classes = len(np.unique(y))
 
         if n_classes > 1:
@@ -151,7 +172,11 @@ class SklearnClassifiers:
 
             # Put the result into a color plot
             Z = Z.reshape((xx.shape[0], xx.shape[1], 3))
-            plt.imshow(Z, extent=(x_min, x_max, y_min, y_max), origin="lower")
+            plt.imshow(Z,
+                extent=(x_min, x_max, y_min, y_max),
+                origin="lower",
+                interpolation="bilinear",
+                alpha=0.8)
         else:
             plt.text(0, 0,
                 "Add at least two points of two different classes\nto train this classifier.",
