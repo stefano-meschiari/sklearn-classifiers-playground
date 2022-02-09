@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import minmax_scale
 import io, base64, math
 import random
@@ -39,6 +40,7 @@ class SklearnClassifiers:
                         "Random Forest",
                         "Support Vector Machine (RBF)",
                         "K-nearest Neighbors",
+                        "2-layer Neural Network",
                         "Gaussian Process Classifier"
                     ],
                     "value": "Logistic Regression"
@@ -51,6 +53,7 @@ class SklearnClassifiers:
                         "Random (3 classes)",
                         "Empty (add your own observations)",
                         "Concentric circles",
+                        "Spiral",
                         "Moons",
                         "Quadrants"
                     ],
@@ -106,6 +109,19 @@ class SklearnClassifiers:
             (X, y) = datasets.make_moons(n_samples=200, noise=0.2, random_state=random_state)
         elif dataset_type == "Empty (add your own observations)":
             (X, y) = ((np.ndarray(shape=(0, 2)), np.array([], dtype="int")))
+
+        elif dataset_type == "Spiral":
+            np.random.seed(random_state)
+            n_samples = 200
+            theta = np.random.uniform(0, 4*math.pi, n_samples)
+            noise = 0
+            r_0 = 2*theta + math.pi
+            r_1 = -2*theta - math.pi
+            X_0 = np.array([r_0 * np.cos(theta)+noise, r_0 * np.sin(theta) + noise]).T
+            X_1 = np.array([r_1 * np.cos(theta)+noise, r_1 * np.sin(theta) + noise]).T
+            X = np.vstack((X_0, X_1))
+            y = np.append(np.zeros(n_samples), np.ones(n_samples))
+            y = y.astype("int")
         elif dataset_type == "Quadrants":
             n_samples = 400
             np.random.seed(random_state)
@@ -139,7 +155,9 @@ class SklearnClassifiers:
         elif classifier == "K-nearest Neighbors":
             clf = KNeighborsClassifier(n_neighbors=5)
         elif classifier == "Random Forest":
-            clf = RandomForestClassifier(max_depth=5, n_estimators=20, max_features=1)
+            clf = RandomForestClassifier(max_depth=5, n_estimators=100, max_features=1)
+        elif classifier == "2-layer Neural Network":
+            clf = MLPClassifier(alpha=0.1, hidden_layer_sizes=(20,20))
 
 
         if len(user_data) > 0 and self.axes is not None:
@@ -178,7 +196,7 @@ class SklearnClassifiers:
                 alpha=0.8)
         else:
             plt.text(0, 0,
-                "Add at least two points of two different classes\nto train this classifier.",
+                "Click on the plot to add at least two points of two different classes\nto train this classifier.",
                 ha='center', va='center')
 
 
