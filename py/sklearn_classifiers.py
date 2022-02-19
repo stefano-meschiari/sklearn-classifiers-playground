@@ -159,7 +159,7 @@ class SklearnClassifiers:
                 print(datum['x'], ", ", datum['y'], " => ",
                       coord[0], ", ", coord[1])
                 X = np.vstack((X, coord))
-                y = np.append(y, datum['class'])
+                y = np.append(y, datum['datumClass'])
 
         plt.close(self.figure)
         self.figure, self.axes = plt.subplots(figsize=(10, 8), dpi=200)
@@ -185,6 +185,16 @@ class SklearnClassifiers:
                 extent=(x_min, x_max, y_min, y_max),
                 origin="lower",
                 alpha=0.8)
+
+            plt.contour(xx, yy, Z[:, :, 0],
+                        levels=[0.5],
+                        colors='red')
+            plt.contour(xx, yy, Z[:, :, 1],
+                        levels=[0.5],
+                        colors='green')
+            plt.contour(xx, yy, Z[:, :, 2],
+                        levels=[0.5],
+                        colors='blue')
         else:
             plt.text(0, 0,
                 "Click on the plot to add at least two points of two different classes\nto train this classifier.",
