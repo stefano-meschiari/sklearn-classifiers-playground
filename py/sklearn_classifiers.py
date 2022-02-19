@@ -24,9 +24,9 @@ class SklearnClassifiers:
 
     def front_matter(self):
         return {
-            "name": "Scikit-learn Classifiers demo",
+            "name": "Scikit-Learn Classifiers Playground",
             "description": """
-            This applet trains a classifier based on random data with two features. The training data can contain up to 3
+            This applet trains a classifier based on data with two features. The training data can contain up to 3
             classes. Click inside the plot to add new points.
             """,
             "inputs": [
@@ -66,18 +66,7 @@ class SklearnClassifiers:
                     "value": 42
                 },
                 {
-                    "name": "class",
-                    "description": "When clicking, add an observation of class...",
-                    "type": "list",
-                    "values": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ],
-                    "value": "Red"
-                },
-                {
-                    "name": "user_data",
+                    "name": "added_points",
                     "description": "Array of points clicked by the user",
                     "type": "data",
                     "value": []
@@ -96,7 +85,7 @@ class SklearnClassifiers:
         classifier = input["classifier"]
         dataset_type = input["dataset_type"]
         random_state = int(input["seed"])
-        user_data = input["user_data"]
+        added_points = input["added_points"]
 
         plt.style.use("seaborn-white")
 
@@ -159,11 +148,13 @@ class SklearnClassifiers:
         elif classifier == "2-layer Neural Network":
             clf = MLPClassifier(alpha=0.1, hidden_layer_sizes=(20,20))
 
+        X_scatter = X.copy()
+        y_scatter = y.copy()
 
-        if len(user_data) > 0 and self.axes is not None:
+        if len(added_points) > 0 and self.axes is not None:
             inv = self.axes.transData.inverted()
             width, height = self.figure.canvas.get_width_height()
-            for datum in user_data:
+            for datum in added_points:
                 coord = inv.transform((datum['x'], height-datum['y']))
                 print(datum['x'], ", ", datum['y'], " => ",
                       coord[0], ", ", coord[1])
@@ -200,8 +191,8 @@ class SklearnClassifiers:
                 ha='center', va='center')
 
 
-        plt.scatter(X[:, 0], X[:, 1],
-            c=np.array(["r", "g", "b"])[y],
+        plt.scatter(X_scatter[:, 0], X_scatter[:, 1],
+            c=np.array(["r", "g", "b"])[y_scatter], s=20,
             edgecolors=(0, 0, 0))
 
         plt.xlim(-1.5, 1.5)
