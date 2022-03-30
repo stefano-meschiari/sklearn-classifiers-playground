@@ -1,8 +1,6 @@
 # Scikit-learn Classifiers Playground
 
-
-**[Try it online](https://www.stefanom.io/pyodide-sandbox/)**
----
+**[Try it online](https://www.stefanom.io/sklearn-classifiers-playground/)**
 
 :construction: **NOTE: This document is a work in progress!** :construction:
 

@@ -1,8 +1,8 @@
 {
-  "name": "pyodide-sandbox",
+  "name": "sklearn-classifiers-playground",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://stefano-meschiari.github.io/pyodide-sandbox",
+  "homepage": "https://stefano-meschiari.github.io/sklearn-classifiers-playground",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
