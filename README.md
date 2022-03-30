@@ -1,70 +1,19 @@
-# Getting Started with Create React App
+# Scikit-learn Classifiers Playground
+:construction: **NOTE: This document is a work in progress!** :construction:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**[Try it online](https://www.stefanom.io/pyodide-sandbox/)**
 
-## Available Scripts
+![](img/playground.png)
 
-In the project directory, you can run:
+This web application runs Scikit-learn classifier and Matplotlib in the browser. This is implemented without any server component using [Pyodide](https://pyodide.org/en/stable/).
 
-### `npm start`
+Briefly, a Python class (`SklearnClassifiers`, defined in [sklearn_classifiers.py](py/sklearn_classifiers.py))  first defines the set of inputs (the type of classifier, the dataset, a random seed, etc.). This set of inputs is used to build the React components in the sidebar ([PyodideApplet](src/PyodideApplet.js)).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+On first run, or when the value of the inputs change, the React app calls the `compute()` method defined in `SklearnClassifiers`. This method trains a classifier,  computes a 2D matrix of predictions, plots them on a Matplotlib figure, base64-encodes the output image, and returns it to the React app. Finally, the React app displays the base64-encoded image in an `<img>` tag.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Note that I also implemented (in a very flawed way) the ability to add additional "custom" points to the dataset simply by clicking on the plot. Each point added by the user is draggable. Since the underlying plot is a static image, I overlay draggable elements whose coordinates are sent to the Python code, translated into the Matplotlib figure coordinate space, and added to the dataset used to train the classifier. I will probably remove this code eventually, since it is very hacky.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### TODOs
+- [] Run Pyodide in a Web Worker to avoid locking the main thread
+- [] Switch from Matplotlib to an SVG-based plotting library
+- [] Add the ability to import a 2D dataset (e.g. as a CSV file)

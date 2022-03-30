@@ -1,9 +1,73 @@
 
-// Import Bootstrap and its default variables
+
 @import '~bootstrap/scss/bootstrap.scss';
 
-.img-container {
-    img {
-        max-width:100%;
+.spinner-computing {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.sidebar {
+    background: $gray-200;
+    padding: 1em;
+}
+
+.plotter {
+    user-select: none;
+
+    .card {
+        border: none;
+    }
+
+    .img-container {
+        padding: 0px;
+        border: 0px;
+
+        img {
+            max-width:100%;
+        }
+    }
+
+
+    .toolbar {
+        width:3em;
+        padding:0px;
+
+        .btn-group-vertical {
+            margin:0.5em;
+        }
+
+        .class-0 {
+            color: red;
+        }
+
+        .class-1 {
+            color: green;
+        }
+
+        .class-2 {
+            color: blue;
+        }
+
+
+    }
+
+    .point:hover {
+        transform:scale(2)
+    }
+
+    .point {
+        border: 2px solid black
+    }
+
+    .point-0 {
+        background: red;
+    }
+    .point-1 {
+        background: green;
+    }
+    .point-2 {
+        background: blue;
     }
 }

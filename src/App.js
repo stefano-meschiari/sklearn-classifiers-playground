@@ -6,13 +6,15 @@ import PyodideApplet from './PyodideApplet';
 function App() {
   return (
     <div className="App">
-      <Container fluid>
-        <Row>
-          <PyodideLoader>
-            <PyodideApplet src="/pyodide-sandbox/py/sklearn_classifiers.py" title="Scikit-learn Classifiers demo" />
-          </PyodideLoader>
-        </Row>
-      </Container>
+
+        <PyodideLoader>
+          <PyodideApplet
+            src="/pyodide-sandbox/py/sklearn_classifiers.py"
+            pythonClass="SklearnClassifiers"
+            title="Scikit-Learn Classifiers Playground"
+          />
+        </PyodideLoader>
+
     </div>
   );
 }

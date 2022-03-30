@@ -1,18 +1,28 @@
 import React from 'react';
-import { Button, Form, Container, Row, Col, Card } from 'react-bootstrap';
-import SandboxSpinner from './Spinner';
-
+import { Button, Form, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import _ from 'lodash';
+
+import SandboxSpinner from './Spinner';
+import Plotter from './Plotter';
+
 
 class PyodideApplet extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { 'parameters': {}, 'values': {} }
+        this.state = {
+            'parameters': {},
+            'values': {},
+            'computing': false
+        }
+        this.debouncedHandleCompute = _.debounce(() => this.handleCompute(), 750)
     }
 
     async setupParameters() {
         console.log("Setting up parameters...")
-        await window.pyodide.runPythonAsync(`parameters = json.dumps(front_matter())`)
+        await window.pyodide.runPythonAsync(`
+        applet = ${this.props['pythonClass']}()
+        parameters = json.dumps(applet.front_matter())
+        `)
         const parameters = JSON.parse(window.pyodide.globals.get("parameters"))
         const values = Object.fromEntries(parameters["inputs"].map(i => [i['name'], i['value']]))
         console.log("Parameters from script front matter", parameters)
@@ -21,21 +31,30 @@ class PyodideApplet extends React.Component {
     }
 
     async compute() {
-        this.setState({ loaded: false })
         window.inputs = JSON.stringify(this.state['values'])
         console.log("Running computation with inputs ", window.inputs)
         await window.pyodide.runPythonAsync(`
             from js import inputs
-
-            output = compute(inputs)
+            output = applet.compute(inputs)
         `)
-        this.setState({loaded: true, imgContent: window.pyodide.globals.get("output")})
+        const output = JSON.parse(window.pyodide.globals.get("output"))
+
+        this.setState({
+            computing: false,
+            plotContent: output
+        })
     }
 
     handleUpdateParameter(name, value, recompute=false) {
-        this.setState({ 'values': { ...this.state['values'], [name]: value } })
+        this.setState({
+            'values': {
+                ...this.state['values'],
+                [name]: value
+            }
+        })
         if (recompute) {
-            this.handleCompute()
+            this.setState({'computing': true})
+            this.debouncedHandleCompute()
         }
     }
 
@@ -51,6 +70,9 @@ class PyodideApplet extends React.Component {
         } else if (input['type'] === "numeric") {
             const handler = (e) => this.handleUpdateParameter(input['name'], e.target.value)
             return (<Form.Control key={input['name']} value={this.state['values'][name]} type="numeric" disabled={disabled} onChange={handler}></Form.Control>)
+        } else if (input['type'] === "data") {
+            // do nothing
+            return null
         } else {
             throw new Error(`Unknown type ${input['type']}`)
         }
@@ -59,8 +81,11 @@ class PyodideApplet extends React.Component {
     sidebar() {
         // this would be much better if we used a state container, but it's fine for
         // a quick hack
-        let formItems = (this.state["parameters"]["inputs"] || []).map(input => {
+        let formItems = (this.state["parameters"]["inputs"] ?? []).map(input => {
             let control = this.createParametersFormItem(input)
+            if (control == null) {
+                return(<></>)
+            }
             return (
                 <Form.Group key={"group-" + input['name']} className="mb-3">
                     <Form.Label key={"label-" + input['name']}>{input['description']}</Form.Label>
@@ -80,9 +105,15 @@ class PyodideApplet extends React.Component {
         return [title, ...formItems];
     }
 
+
+
     async handleCompute() {
-        this.setState({ loaded: false })
+        this.setState({computing: true})
         _.defer(() => this.compute())
+    }
+
+    handlePointsChange(points, action) {
+        this.handleUpdateParameter('added_points', points, true)
     }
 
     async componentDidMount() {
@@ -91,7 +122,7 @@ class PyodideApplet extends React.Component {
         console.log("Running script at ", source)
 
         let pySource = await (await fetch(source)).text()
-        console.log("Source:", pySource)
+
         await window.pyodide.runPythonAsync(pySource)
 
         _.defer(async () => {
@@ -105,25 +136,45 @@ class PyodideApplet extends React.Component {
         if (!this.state['loaded']) {
             return <SandboxSpinner reason="Training..."></SandboxSpinner>
         }
-        return (<div className="img-container"><img src={this.state['imgContent']} alt="Classifier Output" /></div>);
+
+        const spinner = (this.state['computing'] ?
+            <Spinner animation="grow" className="spinner-computing" /> :
+            <></>)
+
+        return (
+            <>
+
+                <Plotter points={this.state['values']['added_points']}
+                    content={this.state.plotContent}
+                    onChange={(...args) => this.handlePointsChange(...args)}
+                />
+                {spinner}
+            </>
+        );
+    }
+
+    handleSubmit(e) {
+        this.handleCompute()
+        e.preventDefault()
     }
 
     render() {
         return (
             <Container fluid>
-                <h1>{this.props.title}</h1>
                 <Row>
-                    <Col xs={8}>
-                        <Card>
-                            <Card.Body>{this.content()}</Card.Body>
-                        </Card>
+                    <Col xs={9}>
+                        {this.content()}
                     </Col>
-                    <Col xs={4}>
-                        <Form>
+                    <Col xs={3} className="sidebar">
+                        <h1>
+                            {this.props.title}
+                        </h1>
+                        <Form onSubmit={this.handleSubmit}>
                             {this.sidebar()}
                             <Button
                                 onClick={() => this.handleCompute()}
-                                disabled={!this.state['loaded']}>
+                                disabled={!this.state['loaded']}
+                                variant="dark">
                                 Train Classifier
                             </Button>
                         </Form>
