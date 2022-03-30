@@ -1,2 +1,0 @@
-(self.webpackChunkpyodide_sandbox=self.webpackChunkpyodide_sandbox||[]).push([[166],{166:function(e){function n(e){return Promise.resolve().then((function(){var n=new Error("Cannot find module '"+e+"'");throw n.code="MODULE_NOT_FOUND",n}))}n.keys=function(){return[]},n.resolve=n,n.id=166,e.exports=n}}]);
-//# sourceMappingURL=166.8bc9c4f5.chunk.js.map

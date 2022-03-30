@@ -1,4 +1,5 @@
-# TODO: refactor and comment the entire script
+# Adapted from https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpc_iris.html#sphx-glr-auto-examples-gaussian-process-plot-gpc-iris-py
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -146,14 +147,17 @@ class SklearnClassifiers:
         elif classifier == "Random Forest":
             clf = RandomForestClassifier(max_depth=5, n_estimators=100, max_features=1)
         elif classifier == "2-layer Neural Network":
-            clf = MLPClassifier(alpha=0.1, hidden_layer_sizes=(20,20))
+            clf = MLPClassifier(alpha=0.1, max_iter=500, hidden_layer_sizes=(20,20))
 
         X_scatter = X.copy()
         y_scatter = y.copy()
 
+
         if len(added_points) > 0 and self.axes is not None:
-            inv = self.axes.transData.inverted()
+            trans = self.axes.transData
             width, height = self.figure.canvas.get_width_height()
+
+            inv = trans.inverted()
             for datum in added_points:
                 coord = inv.transform((datum['x'], height-datum['y']))
                 print(datum['x'], ", ", datum['y'], " => ",
@@ -186,15 +190,16 @@ class SklearnClassifiers:
                 origin="lower",
                 alpha=0.8)
 
-            plt.contour(xx, yy, Z[:, :, 0],
-                        levels=[0.5],
-                        colors='red')
+
             plt.contour(xx, yy, Z[:, :, 1],
-                        levels=[0.5],
+                        levels=[0.51],
                         colors='green')
             plt.contour(xx, yy, Z[:, :, 2],
-                        levels=[0.5],
+                        levels=[0.51],
                         colors='blue')
+            plt.contour(xx, yy, Z[:, :, 0],
+                        levels=[0.51],
+                        colors='red')
         else:
             plt.text(0, 0,
                 "Click on the plot to add at least two points of two different classes\nto train this classifier.",
@@ -203,7 +208,8 @@ class SklearnClassifiers:
 
         plt.scatter(X_scatter[:, 0], X_scatter[:, 1],
             c=np.array(["r", "g", "b"])[y_scatter], s=20,
-            edgecolors=(0, 0, 0))
+            edgecolors=(0, 0, 0),
+            zorder=3)
 
         plt.xlim(-1.5, 1.5)
         plt.ylim(-1.5, 1.5)
@@ -211,11 +217,15 @@ class SklearnClassifiers:
         plt.xlabel("Feature 1")
         plt.ylabel("Feature 2")
 
-        plt.title(classifier)
-
         plt.tight_layout()
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
 
-        return 'data:image/png;base64,' + base64.b64encode(buf.read()).decode('UTF-8')
+        out = json.dumps({
+            'data': 'data:image/png;base64,' + base64.b64encode(buf.read()).decode('UTF-8'),
+            'plot_attributes': {
+                'size': self.figure.canvas.get_width_height()
+            }
+        })
+        return out

@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/pyodide-sandbox/static/css/main.dab2c2aa.css",
-    "main.js": "/pyodide-sandbox/static/js/main.b134122a.js",
-    "static/js/166.8bc9c4f5.chunk.js": "/pyodide-sandbox/static/js/166.8bc9c4f5.chunk.js",
-    "static/js/787.855a62e6.chunk.js": "/pyodide-sandbox/static/js/787.855a62e6.chunk.js",
-    "static/js/359.05e1d120.chunk.js": "/pyodide-sandbox/static/js/359.05e1d120.chunk.js",
-    "static/js/195.b4eb620a.chunk.js": "/pyodide-sandbox/static/js/195.b4eb620a.chunk.js",
-    "index.html": "/pyodide-sandbox/index.html",
-    "main.dab2c2aa.css.map": "/pyodide-sandbox/static/css/main.dab2c2aa.css.map",
-    "main.b134122a.js.map": "/pyodide-sandbox/static/js/main.b134122a.js.map",
-    "166.8bc9c4f5.chunk.js.map": "/pyodide-sandbox/static/js/166.8bc9c4f5.chunk.js.map",
-    "787.855a62e6.chunk.js.map": "/pyodide-sandbox/static/js/787.855a62e6.chunk.js.map",
-    "359.05e1d120.chunk.js.map": "/pyodide-sandbox/static/js/359.05e1d120.chunk.js.map",
-    "195.b4eb620a.chunk.js.map": "/pyodide-sandbox/static/js/195.b4eb620a.chunk.js.map"
+    "main.css": "/sklearn-classifiers-playground/static/css/main.dab2c2aa.css",
+    "main.js": "/sklearn-classifiers-playground/static/js/main.02f3f433.js",
+    "static/js/166.0e7ac0c2.chunk.js": "/sklearn-classifiers-playground/static/js/166.0e7ac0c2.chunk.js",
+    "static/js/787.9b1b0a32.chunk.js": "/sklearn-classifiers-playground/static/js/787.9b1b0a32.chunk.js",
+    "static/js/359.8b049b0a.chunk.js": "/sklearn-classifiers-playground/static/js/359.8b049b0a.chunk.js",
+    "static/js/195.b06a0ecb.chunk.js": "/sklearn-classifiers-playground/static/js/195.b06a0ecb.chunk.js",
+    "index.html": "/sklearn-classifiers-playground/index.html",
+    "main.dab2c2aa.css.map": "/sklearn-classifiers-playground/static/css/main.dab2c2aa.css.map",
+    "main.02f3f433.js.map": "/sklearn-classifiers-playground/static/js/main.02f3f433.js.map",
+    "166.0e7ac0c2.chunk.js.map": "/sklearn-classifiers-playground/static/js/166.0e7ac0c2.chunk.js.map",
+    "787.9b1b0a32.chunk.js.map": "/sklearn-classifiers-playground/static/js/787.9b1b0a32.chunk.js.map",
+    "359.8b049b0a.chunk.js.map": "/sklearn-classifiers-playground/static/js/359.8b049b0a.chunk.js.map",
+    "195.b06a0ecb.chunk.js.map": "/sklearn-classifiers-playground/static/js/195.b06a0ecb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dab2c2aa.css",
-    "static/js/main.b134122a.js"
+    "static/js/main.02f3f433.js"
   ]
 }
