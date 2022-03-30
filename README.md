@@ -31,5 +31,8 @@ Note that I also implemented (in a very flawed way) the ability to add additiona
 
 #### TODOs
 - [ ] Run Pyodide in a Web Worker to avoid locking the main thread
+- [ ] Document development in a blog post
 - [ ] Switch from Matplotlib to an SVG-based plotting library
+- [ ] Add the ability to set hyperparameters for each type of classifier
+- [ ] Mobile-friendly layout
 - [ ] Add the ability to import a 2D dataset (e.g. as a CSV file)
