@@ -1,7 +1,10 @@
 # Scikit-learn Classifiers Playground
-:construction: **NOTE: This document is a work in progress!** :construction:
+
 
 **[Try it online](https://www.stefanom.io/pyodide-sandbox/)**
+---
+
+:construction: **NOTE: This document is a work in progress!** :construction:
 
 ![](img/playground.png)
 
@@ -14,6 +17,6 @@ On first run, or when the value of the inputs change, the React app calls the `c
 Note that I also implemented (in a very flawed way) the ability to add additional "custom" points to the dataset simply by clicking on the plot. Each point added by the user is draggable. Since the underlying plot is a static image, I overlay draggable elements whose coordinates are sent to the Python code, translated into the Matplotlib figure coordinate space, and added to the dataset used to train the classifier. I will probably remove this code eventually, since it is very hacky.
 
 #### TODOs
-- [] Run Pyodide in a Web Worker to avoid locking the main thread
-- [] Switch from Matplotlib to an SVG-based plotting library
-- [] Add the ability to import a 2D dataset (e.g. as a CSV file)
+- [ ] Run Pyodide in a Web Worker to avoid locking the main thread
+- [ ] Switch from Matplotlib to an SVG-based plotting library
+- [ ] Add the ability to import a 2D dataset (e.g. as a CSV file)
