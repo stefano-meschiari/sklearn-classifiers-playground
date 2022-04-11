@@ -7,7 +7,7 @@
 
 ![](img/playground.png)
 
-This web application runs Scikit-learn classifier and Matplotlib in the browser. This is implemented without any server component using [Pyodide](https://pyodide.org/en/stable/). 
+This web application interactively trains Scikit-learn classification algorithms and plots class boundaries using Matplotlib. This is implemented without any server component using [Pyodide](https://pyodide.org/en/stable/) -- **it's all running on your browser**! 
 
 The following classifiers can be trained:
 
