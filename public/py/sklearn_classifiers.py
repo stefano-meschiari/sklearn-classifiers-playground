@@ -1,5 +1,8 @@
 # Adapted from https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpc_iris.html#sphx-glr-auto-examples-gaussian-process-plot-gpc-iris-py
 
+# Just testing Semgrep
+print("Hello!")
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
